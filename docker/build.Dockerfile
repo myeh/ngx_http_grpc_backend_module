@@ -15,14 +15,17 @@ RUN \
 
 RUN \
   cd /tmp && \
-  curl -sLo nginx.tgz https://nginx.org/download/nginx-1.12.2.tar.gz && \
+  curl -sLo nginx.tgz https://nginx.org/download/nginx-1.11.2.tar.gz && \
   tar -xzvf nginx.tgz
-
 
 RUN \
   cd /tmp && \
   curl -sLo ndk.tgz https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz && \
   tar -xzvf ndk.tgz
+
+RUN \
+  cd /tmp && \
+  git clone https://github.com/openresty/echo-nginx-module.git
 
 RUN \
   go get -u google.golang.org/grpc && \
@@ -49,6 +52,7 @@ RUN \
     --with-debug \
     --add-module=/tmp/ngx_devel_kit-0.3.0 \
     --add-module=/go/src/github.com/myeh/ngx_http_grpc_backend_module \
+    --add-module=/tmp/echo-nginx-module \
     && \
   make && \
   make install

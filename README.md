@@ -94,6 +94,12 @@ This installation guide uses ubuntu/debian. Adapt as-needed for other platforms.
     $ git clone https://github.com/myeh/ngx_http_grpc_backend_module /go/src/github.com/myeh/ngx_http_grpc_backend_module
     ```
 
+1. Download/clone echo module:
+
+    ```sh
+    $ git clone https://github.com/openresty/echo-nginx-module.git
+    ```
+
 1. Compile the Go code as a shared C library which nginx will dynamically load.
 This uses CGO and binds to the nginx development kit:
 
@@ -121,6 +127,7 @@ This uses CGO and binds to the nginx development kit:
           --with-debug \
           --add-module=/tmp/ngx_devel_kit-0.3.0 \
           --add-module=/go/src/github.com/myeh/ngx_http_grpc_backend_module
+          --add-module=/tmp/echo-nginx-module
     $ make
     $ make install
     ```
@@ -135,6 +142,7 @@ This uses CGO and binds to the nginx development kit:
 
         location /hello {
           helloworld $result world;
+          echo $result;
         }
       }
     }
@@ -146,3 +154,10 @@ This uses CGO and binds to the nginx development kit:
 There is a sample Dockerfile and entrypoint which builds and runs this custom
 nginx installation with all required modules.
 
+## Result
+
+Once the docker container is up and running both the gRPC server and nginx will
+be up and running.  You will be able to run from your local machine
+    ```sh
+    curl localhost:8080/hello
+    ```
